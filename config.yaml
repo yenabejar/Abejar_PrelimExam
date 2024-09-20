@@ -1,0 +1,21 @@
+---
+- hosts: [servers]
+  tasks:
+  become: true
+
+  - name: Update APT package manager repositories cache
+     apt:
+       update_cache:yes
+
+  - name: Install OpenJDK Java
+    apt:
+      name: "{{ item }}"
+      state: present
+       with_items:
+       openjdk-8-jdk
+
+  - name: Install Python3
+    apt:
+      name: python3
+      state: present
+ 
