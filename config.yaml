@@ -1,21 +1,36 @@
 ---
 - hosts: [servers]
-  tasks:
   become: true
+  tasks:
 
   - name: Update APT package manager repositories cache
-     apt:
+    apt:
        update_cache:yes
 
   - name: Install OpenJDK Java
     apt:
       name: "{{ item }}"
       state: present
-       with_items:
-       openjdk-8-jdk
+      with_items:
+      openjdk-8-jdk
 
-  - name: Install Python3
+  - name: Install Python3 and Pip3
     apt:
-      name: python3
+      name: 
+        - python3
+        - python3-pip
       state: present
+      update_cache: yes
+
+  - name: Set as default Python3 and Pip3
+    alternatives:
+      name: python
+      link: /usr/bin/python
+      path: /usr/bin/python3
+      priority: 1
+      register: python_version
+
+  - name: set pip3 as default
+    command: update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+    
  
